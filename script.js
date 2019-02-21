@@ -38,6 +38,7 @@ const bars1 = svg1.selectAll("rect")
     .data(data)
     .enter()
     .append("rect")
+    .attr("class", "bar-horizontal")
     .attr("width", function (d) {
         return widthScale(d);
     })
@@ -47,7 +48,8 @@ const bars1 = svg1.selectAll("rect")
     })
     .attr("y", function (d, i) {
         return i * 50;
-    });
+    })
+    .text(function(d) { return d; });
 
 svg1.append("g")
     .attr("transform", "translate(0, 250)")
@@ -55,3 +57,10 @@ svg1.append("g")
 
 // ---> Bar chart 2 <---
 
+d3.select(".chart1")
+    .selectAll("div")
+    .data(data)
+        .enter()
+        .append("div")
+        .style("width", function(d) { return d + "px"; })
+        .text(function(d) { return d; })
