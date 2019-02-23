@@ -15,18 +15,18 @@ document.addEventListener("DOMContentLoaded", function (e) {
 function convertData(data) {
   let arr = [];
 
-  console.log(data.bpi)
   for (const i in data.bpi) {
     arr.push({
       date: new Date(i),
       value: +data.bpi[i]
     });
   }
-  console.log(arr)
   return arr;
 }
 
 function drawLineChart(data) {
+
+  console.log(data)
 
   var svgWidth = 600, svgHeight = 400;
   var margin = {
@@ -34,7 +34,7 @@ function drawLineChart(data) {
     bottom: 30, left: 50
   };
 
-  var width = svgWidth - margin.legt - margin.right;
+  var width = svgWidth - margin.left - margin.right;
   var height = svgHeight - margin.top - margin.bottom;
 
   var svg = d3.select('svg')
@@ -69,6 +69,15 @@ function drawLineChart(data) {
     .y(function (d) { return y(d.value) })
   x.domain(d3.extent(data, function (d) { return d.date }));
   y.domain(d3.extent(data, function (d) { return d.value }));
+
+  g.append("path")
+    .datum(data)
+    .attr("fill", "none")
+    .attr("stroke", "red")
+    .attr("stroke-linejoin", "round")
+    .attr("stroke-linecap", "round")
+    .attr("stroke-width", 1.5)
+    .attr("d", line);
 }
 
 
