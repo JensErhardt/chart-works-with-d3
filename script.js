@@ -1,66 +1,75 @@
-// ---> Bar chart 1 <---
-const data = [5, 20, 40, 50, 60];
+const api = "https://api.coindesk.com/v1/bpi/historical/close.json?start=2017-12-31&end=2018-04-01"
 
-let width = 600;
-let height = 300;
-
-const margin = {
-    top: 20,
-    left: 20,
-    right: 20,
-    bottom: 20
-};
-
-width = width - margin.left - margin.right;
-height = height - margin.top - margin.bottom;
-
-const widthScale = d3.scaleLinear()
-    .domain([0, 60])
-    .range([0, width]);
-
-const colorScale = d3.scaleLinear()
-    .domain([0, 60])
-    .range(["red", "yellow"]);
-
-const axis = d3.axisBottom()
-    .scale(widthScale);
-
-const svg1 = d3.select("body")
-    .append("svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.right)
-    .attr("class", "bar-chart-1")
-    .append("g")
-    .attr("transform" , "translate(" + margin.top + "," + margin.right + ")")
-
-
-const bars1 = svg1.selectAll("rect")
-    .data(data)
-    .enter()
-    .append("rect")
-    .attr("class", "bar-horizontal")
-    .attr("width", function (d) {
-        return widthScale(d);
+document.addEventListener("DOMContentLoaded", function (e) {
+  fetch(api)
+    .then(function (response) {
+      return response.json();
     })
-    .attr("height", 25)
-    .attr("fill", function (d) {
-        return colorScale(d);
+    .then(function (response) {
+      const data = convertData(response);
+
+      drawLineChart(data);
     })
-    .attr("y", function (d, i) {
-        return i * 50;
-    })
-    .text(function(d) { return d; });
+});
 
-svg1.append("g")
-    .attr("transform", "translate(0, 250)")
-    .call(axis);
+function convertData(data) {
+  let arr = [];
 
-// ---> Bar chart 2 <---
+  console.log(data.bpi)
+  for (const i in data.bpi) {
+    arr.push({
+      date: new Date(i),
+      value: +data.bpi[i]
+    });
+  }
+  console.log(arr)
+  return arr;
+}
 
-d3.select(".chart1")
-    .selectAll("div")
-    .data(data)
-        .enter()
-        .append("div")
-        .style("width", function(d) { return d + "px"; })
-        .text(function(d) { return d; })
+function drawLineChart(data) {
+
+  var svgWidth = 600, svgHeight = 400;
+  var margin = {
+    top: 20, right: 20,
+    bottom: 30, left: 50
+  };
+
+  var width = svgWidth - margin.legt - margin.right;
+  var height = svgHeight - margin.top - margin.bottom;
+
+  var svg = d3.select('svg')
+    .attr("width", svgWidth)
+    .attr("height", svgHeight);
+
+  var g = svg.append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+  var x = d3.scaleTime().rangeRound([0, width]);
+
+  var y = d3.scaleLinear().rangeRound([height, 0]);
+
+  g.append("g")
+    .attr("transform", "translate(0," + height + ")")
+    .call(d3.axisBottom(x))
+    .select(".domain")
+    .remove();
+
+  g.append("g")
+    .call(d3.axisLeft(y))
+    .append("text")
+    .attr("fill", "#000")
+    .attr("transform", "rotate(-90)")
+    .attr("y", 6)
+    .attr("dy", "0.71em")
+    .attr("text-anchor", "end")
+    .text("Price ($)");
+
+  var line = d3.line()
+    .x(function (d) { return x(d.date) })
+    .y(function (d) { return y(d.value) })
+  x.domain(d3.extent(data, function (d) { return d.date }));
+  y.domain(d3.extent(data, function (d) { return d.value }));
+}
+
+
+
