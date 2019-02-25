@@ -295,7 +295,7 @@ function drawLineChart2(data) {
   g.append("path")
     .datum(data)
     .attr("fill", "none")
-    .attr("stroke", "red")
+    .attr("stroke", "orange")
     .attr("stroke-linejoin", "round")
     .attr("stroke-linecap", "round")
     .attr("stroke-width", 1.5)
