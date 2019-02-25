@@ -92,10 +92,11 @@ function drawLineChart(data) {
 }
 
 function calculateRandom(data) {
-  const max = document.getElementById("maximum").value;
+  const max = $("#maximum").val()
 
-  for (let i = 0; i < data.length; i++) {
-    data[i].value = Math.floor((Math.random() * max) + 1);
+  for (let date of data) {
+    date.value = Math.floor((Math.random() * max) + 1)
+    console.log(date)
   }
 }
 
@@ -103,14 +104,14 @@ function drawLineChart1(data) {
 
   const svgWidth = 600, svgHeight = 400;
   const margin = {
-    top: 20, right: 20,
-    bottom: 30, left: 20
+    top: 30, right: 20,
+    bottom: 30, left: 50
   };
 
   const width = svgWidth - margin.left - margin.right;
   const height = svgHeight - margin.top - margin.bottom;
 
-  let svg = d3.selectAll('svg').filter(".line-chart-1")
+  let svg = d3.select(".line-chart-1")
     .attr("width", svgWidth)
     .attr("height", svgHeight);
 
