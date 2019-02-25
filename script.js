@@ -125,7 +125,7 @@ function drawLineChart1(data) {
     .style("font-size", "16px")
     .style("font-family", "helvetica")
     .style("text-decoration", "underline")
-    .text("Interactive line chart");
+    .text("Randomized Bitcoin Price Index");
 
   const x = d3.scaleTime().rangeRound([0, width]);
 

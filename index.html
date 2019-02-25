@@ -11,17 +11,23 @@
 
 <body>
     <div class="container">
-        <svg class="line-chart"></svg>
+        <svg class="line-chart mt-2 mb-2"></svg>
 
-            <div class="row">
-                <div class="col-12">
-                    <input id="maximum" type="text" />
-                    <button value="Refresh Page" onClick="window.location.reload()">
-                        Generate Chart with random data
-                    </button>
-                    <svg class="line-chart-1"></svg>
+        <div class="row mb-2">
+            <div class="col-6">
+                <div class="form-row mb-1">
+                    <div class="col">
+                        <input type="text" id="maximum" class="form-control" pattern="[0-9]"/>
+                    </div>
+                    <div class="col">
+                        <button class="btn btn-primary" value="Refresh Page" onClick="window.location.reload()">
+                            Generate BPI with random data
+                        </button>
+                    </div>
                 </div>
+                <svg class="line-chart-1"></svg>
             </div>
+        </div>
 
     </div>
 
