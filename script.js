@@ -1,4 +1,7 @@
-const api = "https://api.coindesk.com/v1/bpi/historical/close.json?start=2019-01-31&end=2019-02-22"
+const from = $("#from").val();
+const to = $("#to").val();
+
+const api = "https://api.coindesk.com/v1/bpi/historical/close.json?start=" + from + "&end=" + to;
 
 document.addEventListener("DOMContentLoaded", function () {
   fetch(api)
@@ -53,7 +56,7 @@ function drawLineChart(data) {
     .style("font-size", "16px")
     .style("font-family", "helvetica")
     .style("text-decoration", "underline")
-    .text("Bitcoin Price Index 2019-01-31 to 2019-02-22");
+    .text("Bitcoin Price Index " + from + " to " + to);
 
   const x = d3.scaleTime().rangeRound([0, width]);
 
@@ -96,7 +99,6 @@ function calculateRandom(data) {
 
   for (let date of data) {
     date.value = Math.floor((Math.random() * max) + 1)
-    console.log(date)
   }
 }
 
@@ -125,7 +127,7 @@ function drawLineChart1(data) {
     .style("font-size", "16px")
     .style("font-family", "helvetica")
     .style("text-decoration", "underline")
-    .text("Randomized Bitcoin Price Index");
+    .text("Randomized Bitcoin Price Index " + from + " to " + to);
 
   const x = d3.scaleTime().rangeRound([0, width]);
 

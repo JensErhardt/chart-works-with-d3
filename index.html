@@ -11,20 +11,27 @@
 
 <body>
     <div class="container">
-        <svg class="line-chart mt-2 mb-2"></svg>
-
+        <div class="row mt-2 mb-2">
+            <div class="col-4">
+                <input type="date" id="from" />
+                <input type="date" id="to" />
+                <button class="btn btn-primary" onclick="window.location.reload()">
+                    Apply date
+                </button>
+            </div>
+            <div class="col-8">
+                <svg class="line-chart"></svg>
+            </div>
+        </div>
         <div class="row mb-2">
-            <div class="col-6">
-                <div class="form-row mb-1">
-                    <div class="col">
-                        <input type="text" id="maximum" class="form-control" pattern="[0-9]"/>
-                    </div>
-                    <div class="col">
-                        <button class="btn btn-primary" value="Refresh Page" onClick="window.location.reload()">
-                            Generate BPI with random data
-                        </button>
-                    </div>
-                </div>
+            <div class="col-4">
+                <input class="w-5 mb-2" type="text" id="maximum" class="form-control" title="Only numbers allowed"
+                    placeholder="Please type in random number" />
+                  <button class="btn btn-primary" value="Refresh Page" onClick="window.location.reload()">
+                    Generate BPI with random data
+                </button>
+            </div>
+            <div class="col-8">
                 <svg class="line-chart-1"></svg>
             </div>
         </div>
