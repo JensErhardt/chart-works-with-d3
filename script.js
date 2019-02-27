@@ -10,6 +10,7 @@ document.addEventListener("DOMContentLoaded", function () {
     })
     .then(function (response) {
       const data = parse(response);
+      console.log("DATA",data)
       drawLineChart(data);
 
       const linear = simpleLinearRegression(response)
