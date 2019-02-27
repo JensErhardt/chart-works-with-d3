@@ -10,25 +10,41 @@ document.addEventListener("DOMContentLoaded", function () {
     })
     .then(function (response) {
       const data = parse(response);
-      console.log("DATA",data)
       drawLineChart(data);
 
-      const linear = simpleLinearRegression(response)
-      const prognoses = parseLinear(linear, data)
-      drawLineChart2(prognoses)
+      const linear = simpleLinearRegression(response);
+      const regression = parseLinear(linear, data);
+      drawLineChart2(regression);
 
-      calculateRandomByMax(data)
+      const prediction = parsePrediction(predict());
+      console.log("prediction", prediction)
+      drawLineChart3(prediction);
+      
+      calculateRandomByMax(data);
       drawLineChart1(data);
     })
     .catch((err) => { console.log(err) })
 });
+
+function parsePrediction(data) {
+  let arr = [];
+
+  for (const i in data) {
+    console.log(data[i])
+    arr.push({
+      date: i,
+      value: data[i]
+    });
+  }
+
+  return arr;
+}
 
 function arrayOf(data) {
   let arr = [];
 
   for (const i in data.bpi) {
     arr.push(data.bpi[i])
-
   }
   return arr;
 }
@@ -46,19 +62,20 @@ function parse(data) {
   return arr;
 }
 
-function parseLinear(linear, data) {
+function parseLinear(linear) {
   let arr = [];
   
   for (const i in linear) {
-    console.log(data[i].date)
     arr.push({
       date: i,
       value: +linear[i]
     });
   }
-  console.log("parseLinear", arr)
+
   return arr;
 }
+
+
 
 function calculateRandomByMax(data) {
   const max = $("#maximum").val()
@@ -297,6 +314,71 @@ function drawLineChart2(data) {
     .datum(data)
     .attr("fill", "none")
     .attr("stroke", "orange")
+    .attr("stroke-linejoin", "round")
+    .attr("stroke-linecap", "round")
+    .attr("stroke-width", 1.5)
+    .attr("d", line);
+}
+
+function drawLineChart3(data) {
+
+  const svgWidth = 600, svgHeight = 400;
+  const margin = {
+    top: 20, right: 20,
+    bottom: 30, left: 50
+  };
+
+  const width = svgWidth - margin.left - margin.right;
+  const height = svgHeight - margin.top - margin.bottom;
+
+  let svg = d3.select(".line-chart-3")
+    .attr("width", svgWidth)
+    .attr("height", svgHeight);
+
+  const g = svg.append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+  svg.append("text")
+    .attr("x", (svgWidth / 2))
+    .attr("y", (margin.top / 2 + 10))
+    .attr("text-anchor", "middle")
+    .style("font-size", "16px")
+    .style("font-family", "helvetica")
+    .style("text-decoration", "underline")
+    .text("Predicted BPI based on January values");
+
+  const x = d3.scaleLinear()
+              .domain([0, width])
+              .range([0, width]);
+
+  const y = d3.scaleLinear().rangeRound([height, 0]);
+
+  let line = d3.line()
+    .x(function (d) { return x(d.date) })
+    .y(function (d) { return y(d.value) })
+  x.domain(d3.extent(data, function (d) { return d.date }));
+  y.domain(d3.extent(data, function (d) { return d.value }));
+
+  g.append("g")
+    .attr("transform", "translate(0," + height + ")")
+    .call(d3.axisBottom(x))
+    .select(".domain")
+    .remove();
+
+  g.append("g")
+    .call(d3.axisLeft(y))
+    .append("text")
+    .attr("fill", "#000")
+    .attr("transform", "rotate(-90)")
+    .attr("y", 6)
+    .attr("dy", "0.71em")
+    .attr("text-anchor", "end")
+    .text("Price ($)");
+
+  g.append("path")
+    .datum(data)
+    .attr("fill", "none")
+    .attr("stroke", "red")
     .attr("stroke-linejoin", "round")
     .attr("stroke-linecap", "round")
     .attr("stroke-width", 1.5)
